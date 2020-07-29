@@ -1,5 +1,4 @@
 import pygame
-from get_sprites import get_img
 
 WIN_WIDTH = 800
 WIN_HEIGHT = 600
@@ -22,12 +21,11 @@ move_left = False
 
 
 def drawWindow():
-    # player_model_up = pygame.image.load(get_img())
-    # win.fill((0, 0, 0))
-    pl = pygame.image.load('NES_Sprites.png').convert()
-    pl_rect = pl.PixelArray(pl)
-    win.blit(pl, pl_rect)
-    # win.blit(pygame.image.load('NES_Sprites.png'), (50, 50))
+    # pl = pygame.image.load('1.jpg').convert()
+    # pl_rect = pl.get_rect()
+    # win.blit(pl, pl_rect)
+
+    win.fill((0, 0, 0))
     pygame.draw.rect(win, (100, 0, 255), (player_posx, player_posy, player_width, player_height))
     pygame.display.update()
 
@@ -35,7 +33,7 @@ def drawWindow():
 play = True
 # Цикл выполняется пока переменная равна True
 while play:
-    pygame.time.delay(20)  # 0.1 second`s
+    pygame.time.delay(10)  # 0.1 second`s
     for smth_event in pygame.event.get():
         if smth_event.type == pygame.QUIT:
             play = False
