@@ -10,6 +10,29 @@ bg_rect = bg.get_rect()
 pygame.display.set_caption("Game_one")
 
 pl = Player()
+pl2 = Enemy()
+tanks = pygame.sprite.Group()
+tanks.add(pl2)
+
+
+def win_draw():
+    win.blit(bg, bg_rect)
+    win.blit(pl.image, pl.rect)
+    # win.blit(pl2.image,  pl2.rect)
+    tanks.draw(win)
+    pygame.display.update()
+
+
+def display_text():
+    GAME_FONT = pygame.font.SysFont('Comic Sans MS', 30)
+    text_surface = GAME_FONT.render('GAME OVER', False, WHITE)
+    text_rect = text_surface.get_rect()
+    text_rect.centerx = WIN_WIDTH / 2
+    text_rect.top = 10
+    win.blit(text_surface, text_rect)
+    pygame.display.flip()
+    pygame.time.delay(3000)
+
 
 play = True
 # Цикл выполняется пока переменная равна True
@@ -20,32 +43,14 @@ while play:
             play = False
 
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT] and pl.posx > pl.speed:
-        pl.posx -= pl.speed
-    elif keys[pygame.K_RIGHT] and pl.posx < WIN_WIDTH-pl.speed-pl.width:
-        pl.posx += pl.speed
-    elif keys[pygame.K_UP] and pl.posy > pl.speed:
-        if not pl.direction['move_up']:
-            pl.image = pygame.transform.flip(pl.image, False, True)
-        pl.posy -= pl.speed
-        for n in pl.direction.keys():
-            if n == 'move_up':
-                pl.direction[n] = True
-            else:
-                pl.direction[n] = False
-    elif keys[pygame.K_DOWN] and pl.posy < WIN_HEIGHT-pl.speed-pl.height:
-        if not pl.direction['move_down']:
-            pl.image = pygame.transform.flip(pl.image, False, True)
-        pl.posy += pl.speed
-        for n in pl.direction.keys():
-            if n == 'move_down':
-                pl.direction[n] = True
-            else:
-                pl.direction[n] = False
 
-    # drawWindow() не создана
-    win.blit(bg, bg_rect)
-    win.blit(pl.image, (pl.posx, pl.posy), pl.rect)
-    pygame.display.update()
+    pl.move_player(keys)
+    pl2.move_enemy(keys)
+    collide = pygame.sprite.spritecollide(pl, tanks, False)
+    if not collide:
+        win_draw()
+    else:
+        display_text()
+        play = False
 
-pygame.quit()
+# pygame.quit()
